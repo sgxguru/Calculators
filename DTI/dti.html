@@ -1,0 +1,524 @@
+<html>
+<head>
+<script Language='JavaScript'>
+function sn(num) {
+
+   num=num.toString();
+
+
+   var len = num.length;
+   var rnum = "";
+   var test = "";
+   var j = 0;
+
+   var b = num.substring(0,1);
+   if(b == "-") {
+      rnum = "-";
+   }
+
+   for(i = 0; i <= len; i++) {
+
+      b = num.substring(i,i+1);
+
+      if(b == "0" || b == "1" || b == "2" || b == "3" || b == "4" || b == "5" || b == "6" || b == "7" || b == "8" || b == "9" || b == ".") {
+         rnum = rnum + "" + b;
+
+      }
+
+   }
+
+   if(rnum == "" || rnum == "-") {
+      rnum = 0;
+   }
+
+   rnum = Number(rnum);
+
+   return rnum;
+
+}
+
+
+
+function fns(num, places, comma, type, show) {
+
+    var sym_1 = "$";
+    var sym_2 = "";
+
+    var isNeg=0;
+
+    if(num < 0) {
+       num=num*-1;
+       isNeg=1;
+    }
+
+    var myDecFact = 1;
+    var myPlaces = 0;
+    var myZeros = "";
+    while(myPlaces < places) {
+       myDecFact = myDecFact * 10;
+       myPlaces = Number(myPlaces) + Number(1);
+       myZeros = myZeros + "0";
+    }
+
+	onum=Math.round(num*myDecFact)/myDecFact;
+
+	integer=Math.floor(onum);
+
+	if (Math.ceil(onum) == integer) {
+		decimal=myZeros;
+	} else{
+		decimal=Math.round((onum-integer)* myDecFact)
+	}
+	decimal=decimal.toString();
+	if (decimal.length<places) {
+        fillZeroes = places - decimal.length;
+	   for (z=0;z<fillZeroes;z++) {
+        decimal="0"+decimal;
+        }
+     }
+
+   if(places > 0) {
+      decimal = "." + decimal;
+   }
+
+   if(comma == 1) {
+	integer=integer.toString();
+	var tmpnum="";
+	var tmpinteger="";
+	var y=0;
+
+	for (x=integer.length;x>0;x--) {
+		tmpnum=tmpnum+integer.charAt(x-1);
+		y=y+1;
+		if (y==3 & x>1) {
+			tmpnum=tmpnum+",";
+			y=0;
+		}
+	}
+
+	for (x=tmpnum.length;x>0;x--) {
+		tmpinteger=tmpinteger+tmpnum.charAt(x-1);
+	}
+
+
+	finNum=tmpinteger+""+decimal;
+   } else {
+      finNum=integer+""+decimal;
+   }
+
+    if(isNeg == 1) {
+       if(type == 1 && show == 1) {
+          finNum = "-" + sym_1 + "" + finNum + "" + sym_2;
+       } else {
+          finNum = "-" + finNum;
+       }
+    } else {
+       if(show == 1) {
+          if(type == 1) {
+             finNum = sym_1 + "" + finNum + "" + sym_2;
+          } else
+          if(type == 2) {
+             finNum = finNum + "%";
+          }
+
+       }
+
+    }
+
+	return finNum;
+}
+
+
+function computeForm(form) {
+
+      var VmonthlyIncome = sn(document.calc.monthlyIncome.value);
+      var VspouseIncome = sn(document.calc.spouseIncome.value);
+      var VotherIncome = sn(document.calc.otherIncome.value);
+      var VrentMortgagePmt = sn(document.calc.rentMortgagePmt.value);
+      var VsecondMortgagePmt = sn(document.calc.secondMortgagePmt.value);
+      var VhomeinsurancePmt = sn(document.calc.homeinsurancePmt.value);
+      var VhoaPmt = sn(document.calc.hoaPmt.value);
+      var VvehiclePmts = sn(document.calc.vehiclePmts.value);
+      var VcreditUnionPmts = sn(document.calc.creditUnionPmts.value);
+      var VotherLoanPmts = sn(document.calc.otherLoanPmts.value);
+      var VchargePmts = sn(document.calc.chargePmts.value);
+      var VotherPmts = sn(document.calc.otherPmts.value);
+      var VpendingLoanPmts = sn(document.calc.pendingLoanPmts.value);
+
+      var VtotalIncome = Number(VmonthlyIncome) + Number(VspouseIncome) + Number(VotherIncome);
+
+      if(VtotalIncome == 0) {
+         document.calc.totalIncome.value = "";
+         document.calc.totalPmts.value = "";
+         document.calc.debtRatio.value = "";
+         alert("Please enter a monthly income figure.");
+      } else {
+
+         document.calc.totalIncome.value= fns(VtotalIncome,2,1,1,1);
+
+         var VtotalPmts = Number(VrentMortgagePmt) + Number(VsecondMortgagePmt) + Number(VhomeinsurancePmt) + Number(VhoaPmt) + Number(VvehiclePmts) + Number(VcreditUnionPmts) + Number(VotherLoanPmts) + Number(VchargePmts) + Number(VotherPmts) + Number(VpendingLoanPmts);
+         document.calc.totalPmts.value= fns(VtotalPmts,2,1,1,1);
+
+         var VdebtRatio = VtotalPmts / VtotalIncome * 100;
+         document.calc.debtRatio.value = fns(VdebtRatio,2,0,2,1);
+
+         var VrentzPmts = Number(VrentMortgagePmt) + Number(VsecondMortgagePmt) + Number(VhomeinsurancePmt) + Number(VhoaPmt);
+         var VfdRatio = VrentzPmts / VtotalIncome * 100;
+         document.calc.frontdebtRatio.value = fns(VfdRatio,2,0,2,1);
+         document.calc.housPmts.value = fns(VrentzPmts,2,1,1,1);
+
+
+
+      var Vsummary = "<p>";
+
+      if(VdebtRatio < 45.000000001) {
+
+         Vsummary += "<br></br>Given your backend debt ratio you likely qualify for a mortgage.<br /><br />";
+
+
+      } else {
+
+         Vsummary = "<br></br>Your backend debt ratio is quite high. Most lenders would be unwilling to make a mortgage loan matching the above profile. Consider paying down debt, a debt consolidation loan or figuring ways to boost your income to improve your debt load &amp; credit profile.";
+
+      }
+
+      var v_summary_cell = document.getElementById("summary");
+      v_summary_cell.innerHTML = "<font face='arial'><strong></strong> " + Vsummary + "</font>";
+
+   }
+
+
+}
+
+
+function clear_results(form) {
+
+      document.calc.totalIncome.value= "";
+      document.calc.housPmts.value= "";
+      document.calc.totalPmts.value= "";
+      document.calc.debtRatio.value = "";
+      document.calc.frontdebtRatio.value = "";
+
+}
+</script>
+<style>
+ h1 {
+            color: #4CAF50;
+            padding: 5px;
+            font-size: 28px;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        }
+
+        #dit {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 50%;
+            margin: auto;
+        }
+
+
+
+            #dit td, #dti th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+
+
+            #dti tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+
+
+            #dti tr:hover {
+                background-color: #ddd;
+            }
+
+
+
+            #dti th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #4CAF50;
+                color: white;
+            }
+                    .button {
+			            background-color: #4CAF50; /* Green */
+			            border: none;
+			            color: white;
+			            padding: 15px 32px;
+			            text-align: center;
+			            text-decoration: none;
+			            display: inline-block;
+			            font-size: 16px;
+        }
+</style>
+</head>
+<body>
+ <section id="content1">
+
+
+		<h1>Calculate Your Debt to Income Ratio</h1>
+
+ <p> Use this  to figure your debt to income ratio. A backend debt ratio greater than or equal to 40% is generally viewed as an indicator you are a high risk borrower. </p>
+
+<form name="calc" method="post" action="#">
+
+ <table class="sortable" id="dti" width='100%'>
+ <thead>
+ <tr>
+ <td>Description</td>
+ <td>Amount</td>
+ </tr>
+ </thead>
+ <tbody>
+
+<tr>
+<th colspan="2">Enter Your Income Details</th>
+</tr>
+ <tr>
+ <td>
+
+ Monthly gross income:
+
+ </td>
+ <td align="center">
+ <input name="monthlyIncome" type="number" step="any" value="4000" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='4000'?'':this.value;" onblur="this.value = this.value==''?'4000':this.value;" />
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Spouse's monthly income after taxes:
+
+ </td>
+ <td align="center">
+ <input name="spouseIncome" type="number" step="any" value="2000" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='2000'?'':this.value;" onblur="this.value = this.value==''?'2000':this.value;" />
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Other monthly income:
+
+ </td>
+ <td align="center">
+ <input name="otherIncome" type="number" step="any" value="0" size="8"  onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='0'?'':this.value;" onblur="this.value = this.value==''?'0':this.value;" />
+
+ </td>
+ </tr>
+
+<tr>
+<th colspan="2">Front End Ratio Inputs (Monthly Home Debt Only)</th>
+</tr>
+
+
+ <tr>
+ <td>
+
+ Rent or mortgage:
+
+ </td>
+ <td align="center">
+ <input name="rentMortgagePmt" type="number" step="any" value="1300" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='1300'?'':this.value;" onblur="this.value = this.value==''?'1300':this.value;"/>
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ 2nd mortgage:
+
+ </td>
+ <td align="center">
+ <input name="secondMortgagePmt" type="number" step="any" value="0" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='0'?'':this.value;" onblur="this.value = this.value==''?'0':this.value;"/>
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ home insurance:
+
+ </td>
+ <td align="center">
+ <input name="homeinsurancePmt" type="number" step="any" value="100" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='100'?'':this.value;" onblur="this.value = this.value==''?'100':this.value;"/>
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ HOA fees:
+
+ </td>
+ <td align="center">
+ <input name="hoaPmt" type="number" step="any" value="100" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='100'?'':this.value;" onblur="this.value = this.value==''?'100':this.value;"/>
+ </td>
+ </tr>
+
+
+
+
+
+<tr>
+<th colspan="2">Back End Ratio Inputs (Overall Monthly Debit to Income)</th>
+</tr>
+
+
+ <tr>
+ <td>
+
+ Vehicle payments:
+
+ </td>
+ <td align="center">
+ <input name="vehiclePmts" type="number" step="any" value="300" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='300'?'':this.value;" onblur="this.value = this.value==''?'300':this.value;"/>
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Credit union loan payments:
+
+ </td>
+ <td align="center">
+ <input name="creditUnionPmts" type="number" step="any" value="0" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='0'?'':this.value;" onblur="this.value = this.value==''?'0':this.value;"/>
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Student loan payments:
+
+ </td>
+ <td align="center">
+ <input name="otherLoanPmts" type="number" step="any" value="150" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='150'?'':this.value;" onblur="this.value = this.value==''?'150':this.value;"/>
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Minimum credit card payments (Visa, Mastercard, dept. store, etc.):
+
+ </td>
+ <td align="center">
+ <input name="chargePmts" type="number" step="any" value="50" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='50'?'':this.value;" onblur="this.value = this.value==''?'50':this.value;"/>
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Other monthly payments:
+
+ </td>
+ <td align="center">
+ <input name="otherPmts" type="number" step="any" value="0" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='0'?'':this.value;" onblur="this.value = this.value==''?'0':this.value;"/>
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Pending loan payments:
+
+ </td>
+ <td align="center">
+ <input name="pendingLoanPmts" type="number" step="any" value="0" size="8" onKeyUp="clear_results(this.form);computeForm(this.form)" onfocus="this.value = this.value=='0'?'':this.value;" onblur="this.value = this.value==''?'0':this.value;"/>
+ </td>
+ </tr>
+
+
+ <tr>
+ <td align="center" colspan="2">
+ <input type="button" class="button" value="Compute Debt Ratio" onClick="computeForm(this.form)" /> &nbsp;&nbsp;
+ <input type="reset" class="button" value="Reset">
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Your total income:
+
+ </td>
+ <td align="center">
+ <input type="text" name="totalIncome" size="8" />
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Your housing costs:
+
+ </td>
+ <td align="center">
+ <input type="text" name="housPmts" size="8" />
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Frontend debt ratio:
+
+ </td>
+ <td align="center">
+ <input type="text" name="frontdebtRatio" size="8" />
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Your total monthly payments:
+
+ </td>
+ <td align="center">
+ <input type="text" name="totalPmts" size="8" />
+ </td>
+ </tr>
+
+ <tr>
+ <td>
+
+ Backend debt ratio:
+
+ </td>
+ <td align="center">
+ <input type="text" name="debtRatio" size="8" />
+ </td>
+ </tr>
+
+ <tr>
+ <td colspan="2" id="summary">
+
+ </td>
+ </tr>
+
+ </tbody>
+ </table>
+ </form>
+
+  </section>
+
+  <section id="content2">
+
+  </section>
+
+
+</div>
+
+
+
+
+</body>

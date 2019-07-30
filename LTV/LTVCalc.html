@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+
+
+
+
+        h1 {
+            color: #4CAF50;
+            padding: 5px;
+            font-size: 28px;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        }
+
+        #ltvinput {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 50%;
+            margin: auto;
+        }
+
+
+
+            #ltvinput td, #ltvinput th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+
+
+            #ltvinput tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+
+
+            #ltvinput tr:hover {
+                background-color: #ddd;
+            }
+
+
+
+            #ltvinput th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #4CAF50;
+                color: white;
+            }
+        #results {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 50%;
+            margin: auto;
+            margin-top: 20px;
+        }
+
+
+
+            #results td, #resultsth {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+
+
+            #results tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+
+
+            #results tr:hover {
+                background-color: #ddd;
+            }
+
+
+
+            #results th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: center;
+                background-color: #4cbad3;
+                color: white;
+            }
+        #resultsSection {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            font-size: 16.5px;
+            margin: auto;
+            margin-top:20px;
+            width: 30%;
+            border: solid;
+            background-color: darkseagreen;
+            padding: 15px;
+            
+        }
+
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+        hr {
+            display: block;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+            margin-left: auto;
+            margin-right: auto;
+            border-style: solid;
+            border-width: 2px;
+            color:darkslategrey;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">LTV Calculator</h1>
+
+    <form id="ltvform" method="post" action="">
+
+        <table id="ltvinput">
+
+
+
+            <tr> <th> Mortgages </th><th> Amount </th><th> Payoff </th></tr>
+
+            <tr> <td> First Mortgage: </td> <td id="field"><input type="number" name="first" value="100000"> </td><td><input type="checkbox" id="firstpayoff"></td></tr>
+
+            <tr> <td> Second Mortgage: </td> <td id="field"> <input type="number" name="second" value="0"></td><td><input type="checkbox" id="secondpayoff" checked></td></tr>
+
+            <tr> <td> Third Mortgage: </td><td id="field"> <input type="number" name="third" value="0"></td><td><input type="checkbox" id="thirdpayoff" checked></td></tr>
+
+            <tr> <td> New Mortgage/HELOC: </td><td id="field"> <input type="number" name="new" value="0"></td><td></td></tr>
+            <tr> <th>Home Information</th><th colspan="2">Amount</th>
+            <tr>
+
+            <tr> <td>Assessed Home Value: </td><td id="field" colspan="2"><input type="number" name="assessed" value="200000"></td></tr>
+
+            <tr> <td>Estimated Home Value: </td><td id="field" colspan="2"><input type="number" name="estimated" value="200000"></td></tr>
+
+            <tr> <td colspan="3">
+</form>
+
+    <div style="text-align:center;">
+        <button class="button" type="button" style="margin:auto;align:center;" onclick="calc();">Calculate</button></div>
+            </td></tr>
+
+            </table>
+
+            
+                <table id="results"> </table>
+
+
+            <script>
+
+function myFunction() {
+
+    var x = document.getElementById("ltvform").elements[0].value;
+
+    document.getElementById("results").innerHTML = x;
+
+}
+function precisionRound(number, precision) {
+    var factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
+}
+
+Number.prototype.formatMoney = function (c, d, t) {
+    var n = this,
+        c = isNaN(c = Math.abs(c)) ? 2 : c,
+        d = d == undefined ? "." : d,
+        t = t == undefined ? "," : t,
+        s = n < 0 ? "-" : "",
+        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+        j = (j = i.length) > 3 ? j % 3 : 0;
+    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
+
+function calc(){
+
+                var first = parseFloat(document.getElementById("ltvform").elements[0].value);
+                var firstPayoff = document.getElementById("firstpayoff").checked;
+                var second = parseFloat(document.getElementById("ltvform").elements[2].value);
+                var secondPayoff = document.getElementById("secondpayoff").checked;
+                var third = parseFloat(document.getElementById("ltvform").elements[4].value);
+                var thirdPayoff = document.getElementById("thirdpayoff").checked;
+                var newLoan = parseFloat(document.getElementById("ltvform").elements[6].value);
+                var assessed = parseFloat(document.getElementById("ltvform").elements[7].value);
+                var estimated = parseFloat(document.getElementById("ltvform").elements[8].value);
+                var payoff = 0;
+                var payoffCount = 0; //number of payoffs
+                var lienCount = 0; //number of mortgages
+
+                if (firstPayoff) { //sum up the payoffs
+                    payoff += first;
+
+
+                } else { //if not paid off and not zero, add to number of liens
+                    if (first == 0) { } else {
+                        lienCount++;
+                    }}
+                if (secondPayoff) {
+                    payoff += second;
+                       
+                } else { //if not paid off and not zero, add to number of liens
+                    if (second == 0) { } else {
+                        lienCount++;
+                    }
+                }
+                if (thirdPayoff) {
+                    payoff += third;
+
+                } else { //if not paid off and not zero, add to number of liens
+                    if (third == 0) { } else {
+                        lienCount++;
+                    }
+                }
+                if (newLoan == 0) { } else {
+                    lienCount++; //account for new loan
+                }
+                if (lienCount > 2) {//if more than 2 new and exising liens
+                    alert("In most cases, you would have to keep a maximum of 2 liens. You have " + lienCount+" liens now.")
+                }
+                if (payoff > newLoan) { //if there is not enough loans to cover payoff, alert total cash needed
+                    alert("New loan is less than payoffs, will need $" + (payoff - newLoan).formatMoney(2, '.', ',') +" cash at closing");
+                }
+                var existingLiens= first + second + third; //existing liens
+                var liens = existingLiens - payoff + newLoan; //new lien setup, what LTV will be calculated on
+                var remainingLiens = existingLiens - payoff;
+
+
+                var assessedLTV = precisionRound( (liens / assessed)*100, 2 );
+                var estimatedLTV = precisionRound((liens / estimated) * 100, 2);
+
+                var results = "";
+
+                results += "<tr><th colspan=2> Results</th></tr >";
+                results += "<tr><td> Total Payoffs: </td><td>$" + payoff.formatMoney(2, '.', ',') + " </td></tr>";
+                results += "<tr><td>  LTV based on Assessment: </td><td>" + assessedLTV + "% </td></tr>";
+                results += "<tr><td>  LTV based on Estimate: </td><td>" + estimatedLTV + "% </td></tr>";
+                results +="<tr><th colspan='2'>  Calculations for cash-out/refi/equity estimates </th></tr>"
+                if (remainingLiens < assessed * .7) {
+                    results += "<tr><td> 70% LTV Assessed Max: </td><td>$" + precisionRound((assessed * .70) - remainingLiens, 2).formatMoney(2, '.', ',') + " </td></tr>";
+                } else {
+                    results += "<tr><td colspan='2'> Not less than 70% assessed value </td></tr> ";
+                }
+                if (remainingLiens < estimated * .7) {
+                    results += "<tr><td> 70% LTV Estimated Max: </td><td>$" + precisionRound((estimated * .70) - remainingLiens, 2).formatMoney(2, '.', ',') + " </td></tr>";
+                } else {
+                    results += "<tr><td colspan='2'> Not less than 70% estimated value </td></tr>";
+                }    
+                if (remainingLiens < estimated * .75) {
+                    results += "<tr><td> 75% LTV Estimated Max: </td><td>$" + precisionRound((estimated * .75) - remainingLiens, 2).formatMoney(2, '.', ',') + " </td></tr>";
+                } else {
+                    results += "<tr><td colspan='2'> Not less than 75% estimated value </td></tr>";
+                }  
+                if (remainingLiens < estimated * .8) {
+                    results += "<tr><td> 80% LTV Estimated Max: </td><td>$" + precisionRound((estimated * .80) - remainingLiens, 2).formatMoney(2, '.', ',') + "* </td></tr>";
+                } else {
+                    results += "<tr><td colspan='2'> Not less than 80% estimated value </td></tr>";
+                }   
+                if (remainingLiens < estimated * .95) {
+                    results += "<tr><td> 95% LTV Estimated Max: </td><td>$" + precisionRound((estimated * .95) - remainingLiens, 2).formatMoney(2, '.', ',') + "* </td></tr>";
+                } else {
+                    results += "<tr><td colspan='2'> Not less than 95% estimated value </td></tr>";
+                }    
+                if (remainingLiens < estimated * .97) {
+                    results += "<tr><td> 97% LTV Estimated Max: </td><td>$" + precisionRound((estimated * .97) - remainingLiens, 2).formatMoney(2, '.', ',') + "* </td></tr>";
+                } else {
+                    results += "<tr><td colspan='2'> Not less than 97% estimated value </td></tr>";
+                }    
+                results += "<tr><td colspan='2'>*Not usually available for cash-out mortgages. Paid off leins must have been used for purchase of home for a mortgage. Certain exclusions apply. Equity Loans/HELOCs have a max LTV of 80%.</td></tr>"
+                
+               document.getElementById("results").innerHTML = results;
+
+
+    
+}
+
+            </script>
+</body>
+</html>

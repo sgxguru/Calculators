@@ -1,0 +1,186 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>Loan Ammortization</title>
+
+    <script src="scripts\amortization.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+        }
+        h1 {
+            font-weight: 700;
+            color: coral;
+            font-size: 20pt;
+            font-family: Arial;
+        }
+        hr {
+            height: 5px;
+            background-color: coral;
+            border: none;
+        }
+        table{
+            margin: auto;
+            padding: 5px;
+
+        }
+        th {
+            background-color: coral;
+            color: white;
+            border: none;
+        }
+        tr{
+            padding: 5px;
+            
+        }
+            tr:nth-child(even) {
+                background: #CCC
+            }
+
+            tr:nth-child(odd) {
+                background: #FFF
+            }
+            tr:hover {
+                background: lightyellow;
+            }
+        td {
+            padding: 5px;
+            border: none;
+          
+            width: 90px;
+        }
+        .continer{
+            margin:auto;
+        }
+        .half-screen{
+            width: 45%;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align:top;
+            
+        }
+        .spacer{
+            height: 250px;
+        }
+        .overlayResults {
+            position: absolute;
+            top: 425px;
+            width: 30%;
+            padding: 5px;
+            padding-left: 25px;
+            border: 3px solid gray;
+            height: 210px;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            background-color: lightgoldenrodyellow;
+        }
+        .form {
+            border: 5px solid gray;
+            padding: 5px;
+            margin: 5px;
+            height: 300px;
+        }
+        .results {
+            border: 5px solid gray;
+            padding: 5px;
+            margin: 5px;
+            font-family: Arial;
+        }
+        .header {
+            font-weight: 700;
+            color: coral;
+            font-size: 18pt;
+            font-family: Arial;
+        }
+        .input {
+            padding: 10px;
+            margin: 5px;
+            font-family: Arial;
+            display: inline-block;
+        }
+        .input-text {
+            font-weight: 600;
+            color: black;
+            font-size: 14pt;
+            padding: 10px;
+            margin: 5px;
+            font-family: Arial;
+            display: inline-block;
+            width: 250px;
+        }
+        .button {
+            color: white;
+            background-color: chocolate;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            text-align: center;
+            
+        }
+            .button:hover {
+                background-color: burlywood;
+            }
+    </style>
+</head>
+<body>
+    <h1>Loan Comparison</h1>
+    <hr>
+    <div class="continer">
+        <div class="half-screen">
+            <div class="form">
+                <div class="header">Existing Loan</div>
+                <label for="principal" class="input-text"><b>Principal:</b></label>
+                <input type="text" id="principal" class="input" value="1000" />
+                <br />
+                <label for="interest" class="input-text"><b>Interest:</b></label>
+                <input type="text" id="interest" class="input" value="5"/>
+                <br />
+                <label for="terms" class="input-text"><b>Term in Months:</b></label>
+                <input type="text" id="terms" class="input" value="12" />
+                <br />
+                <label for="paid" class="input-text"><b>Number of months paid: </b></label>
+                <input type="text" id="paid" class="input" />
+                <br /><br />
+                <div style="text-align:center;">
+                    <input type="button" value="Calculate" class="button" onclick="getValues()" />
+                </div>
+            </div>
+            <div class="spacer"></div>
+            <div class="results">
+                <div class="header">Results</div>
+                <div id="Result"></div>
+
+            </div>
+        </div>
+        <div class="half-screen">
+            <div class="form">
+                <div class="header">New Loan</div>
+                <label for="principal2" class="input-text"><b>Principal:</b></label>
+                <input type="text" id="principal2" class="input" />
+                <br />
+                <label for="interest2" class="input-text"><b>Interest:</b></label>
+                <input type="text" id="interest2" class="input" />
+                <br />
+                <label for="terms2" class="input-text"><b>Term in Months:</b></label>
+                <input type="text" id="terms2" class="input" />
+                <br /><br />
+                <div style="text-align:center;">
+                    <input type="button" value="Calculate" class="button" onclick="getValues2()" />
+                </div>
+            </div>
+            <div class="spacer"></div>
+            <div class="results">
+                <div class="header">Results</div>
+                <div id="Result2"></div>
+
+            </div>
+        </div>
+        <div class="overlayResults" id="overlayResults"></div>
+    </div>
+</body>
+</html>
+
